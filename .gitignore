@@ -1,0 +1,11 @@
+data/*
+outputs/*
+!data/.gitkeep
+!outputs/.gitkeep
+node_modules/
+.build-cache/
+dist/
+bin/
+.env
+.env.*
+!.env.example
