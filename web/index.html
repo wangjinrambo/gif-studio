@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GIF Studio · 视频转 GIF</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><a class="brand" href="/"><span class="brand-icon">G<span>↗</span></span> GIF Studio <small>本地工作台</small></a><div class="local"><i></i> 本机处理 · 无需上传云端</div></header>
+<main>
+<section class="intro"><div><div class="eyebrow">MAKE A MOMENT LOOP</div><h1>让精彩，循环发生<span>。</span></h1><p>截取一段视频，调好尺寸，把这一刻变成 GIF。</p></div><span class="format-badge">VIDEO <b>↗</b> GIF</span></section>
+<div class="workspace">
+<section class="left-column">
+<div class="panel source-panel">
+<div class="panel-title"><h2><span class="step">01</span> 选择片段</h2><button id="replace" class="text-button" hidden>更换文件 ↗</button></div>
+<input id="file" type="file" accept="video/*,.mkv,.gif,.avi,.wmv,.flv,.ts" hidden>
+<div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="选择视频或 GIF 文件">
+<div class="upload-icon">↥</div><h3>把视频拖到这里</h3><p>或点击选择本地文件</p><span class="formats">MP4 / MOV / WebM / MKV / GIF · 最大 2 GB</span><span class="choose-button">选择视频 <b>＋</b></span>
+</div>
+<div id="source" hidden><div class="video-stage"><video id="video" controls playsinline preload="metadata"></video><img id="gifSource" alt="源 GIF 预览" hidden><img id="scrubFrame" alt="当前截取位置的画面" hidden><div id="previewNotice" hidden>浏览器无法预览此格式，但仍可截取和转换。</div></div><div class="file-info"><strong id="fileName"></strong><span id="fileMeta"></span></div></div>
+<div class="demo-line" id="demoLine">手边没有视频？<button id="demo" class="text-button">用示例试试看 ↗</button></div>
+<fieldset id="trimFields" disabled><div class="trim-heading"><h3>截取时间</h3><span id="durationLabel">尚未选择视频</span></div><div class="timeline"><div id="scrubPreview" class="scrub-preview" hidden><canvas id="scrubCanvas" width="320" height="180" aria-label="滑块当前位置的画面预览"></canvas><span id="scrubTime"></span></div><div class="rail"><div id="rangeFill"></div></div><input id="startRange" aria-label="片段起点" type="range" min="0" max="10" step="0.01" value="0"><input id="endRange" aria-label="片段终点" type="range" min="0" max="10" step="0.01" value="10"></div><div class="time-inputs"><label>开始时间 <div class="input-unit"><input id="start" type="number" min="0" step="0.01" value="0"><span>秒</span></div></label><span class="time-arrow">→</span><label>结束时间 <div class="input-unit"><input id="end" type="number" min="0" step="0.01" value="0"><span>秒</span></div></label><button id="previewClip" class="secondary" type="button">▷ 预览片段</button></div><div class="trim-actions"><button id="setStart" class="text-button">将当前画面设为起点</button><button id="setEnd" class="text-button">设为终点</button><button id="fullLength" class="text-button">使用完整时长</button></div></fieldset>
+</div>
+<div class="note"><span>✦</span><p><strong>小一点，也可以很精彩。</strong>更短的片段、更小的尺寸和适中的帧率，通常能显著减少 GIF 体积。</p></div>
+</section>
+<aside class="panel settings"><div class="panel-title"><h2><span class="step">02</span> 调整导出</h2><span class="mini-badge">.GIF</span></div>
+<fieldset id="settingsFields" disabled>
+<div class="setting-section"><div class="section-label"><h3>画面尺寸</h3><label class="check-label"><input id="lockRatio" type="checkbox" checked> 锁定比例</label></div><div class="size-inputs"><label>宽度<div class="input-unit"><input id="width" type="number" min="16" max="1920" value="480"><span>px</span></div></label><span>×</span><label>高度<div class="input-unit"><input id="height" type="number" min="16" max="1920" value="270"><span>px</span></div></label></div><div class="pills" id="sizePresets"><button data-width="320" type="button">320 px</button><button data-width="480" type="button" class="selected">480 px</button><button data-width="720" type="button">720 px</button><button data-width="original" type="button">原尺寸</button></div></div>
+<div class="setting-section"><div class="section-label"><h3>压缩偏好</h3><span class="muted">画质与体积的平衡</span></div><div class="quality-presets"><button data-quality="small" type="button"><b>轻巧</b><span>适合分享</span></button><button data-quality="balanced" type="button" class="selected"><b>均衡</b><span>日常推荐</span></button><button data-quality="clear" type="button"><b>清晰</b><span>保留细节</span></button></div><div class="section-label fps-label"><label for="fps">帧率</label><output id="fpsValue">12 fps</output></div><input id="fps" type="range" min="1" max="30" value="12"><div class="range-labels"><span>更小体积</span><span>更流畅</span></div><div class="two-fields"><label>颜色数量<select id="colors"><option value="32">32 色</option><option value="64">64 色</option><option value="128" selected>128 色</option><option value="256">256 色</option></select></label><label>颜色处理<select id="dither"><option value="bayer">有序抖动 · 更小</option><option value="sierra2_4a">柔和抖动 · 更细腻</option><option value="none">无抖动 · 扁平图形</option></select></label></div></div>
+<div class="target-box"><label class="check-label"><input id="targetEnabled" type="checkbox"><strong>按目标体积自动压缩</strong></label><div id="targetControl" hidden><div class="input-unit"><input id="targetMB" type="number" min="0.01" max="100" step="0.1" value="2" aria-label="目标体积"><span>MB</span></div><p>必要时自动降低尺寸、帧率和颜色数，保留所选片段时长。最终参数以结果为准。</p></div></div>
+</fieldset>
+<fieldset id="outputFields" class="output-settings"><div class="section-label"><label for="outputDir"><strong>导出位置</strong></label><button id="resetOutput" class="text-button" type="button">恢复默认</button></div><input id="outputDir" class="output-path" type="text" autocomplete="off" spellcheck="false" placeholder="正在读取导出位置…" aria-describedby="outputHint"><div class="output-actions"><button id="chooseOutput" class="secondary" type="button">选择文件夹…</button><button id="saveOutput" class="secondary" type="button">保存位置</button><button id="openOutput" class="text-button" type="button">打开文件夹 ↗</button></div><p id="outputHint" role="status" aria-live="polite">保存后会记住此位置，下次打开继续使用。</p></fieldset>
+<div class="export-summary" id="exportSummary">选择视频后即可开始制作</div><button id="convert" class="primary" disabled>生成 GIF <span>↗</span></button><button id="cancel" class="secondary cancel" hidden>取消转换</button><div id="progressWrap" hidden><div class="progress"><div id="progressBar"></div></div><p id="progressText" role="status" aria-live="polite"></p></div><p class="export-footnote">无限循环播放 · 自动保存至 outputs 文件夹</p>
+</aside>
+</div>
+<div id="error" role="alert" hidden></div>
+<section class="panel result-panel" id="result" hidden><div class="panel-title"><h2><span class="step">03</span> 你的 GIF，准备好了</h2><span class="result-status" id="resultStatus">已完成</span></div><div class="result-content"><div class="result-stage"><img id="resultImage" alt="生成的 GIF 动画预览"></div><div class="result-info"><div class="eyebrow">READY TO SHARE</div><h3 id="resultSize"></h3><p id="resultMeta"></p><p id="resultComparison"></p><p id="resultWarning" class="warning" hidden></p><a id="download" class="primary" download>保存 GIF <span>↓</span></a><button id="editResult" class="secondary">用这个 GIF 继续编辑</button><p class="saved-path" id="savedPath"></p></div></div></section>
+<div id="desktopControls" class="desktop-controls" hidden><span>GIF 会自动保存到你设置的导出位置</span><button id="quitApp" class="text-button">退出工具</button></div>
+<footer><span>GIF Studio</span><span>所有处理留在你的电脑里。</span><span>剪辑 / 缩放 / 压缩</span></footer>
+</main><script src="/app.js" type="module"></script>
+</body></html>
